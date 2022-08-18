@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from authentication.models import CustomUser
 
-from writter.models import WritterModel
 
 
 class BlogModel(models.Model):
@@ -11,16 +11,16 @@ class BlogModel(models.Model):
                   ('data', 'data-science'))
     blogtype = models.CharField(max_length=5, choices=BLOG_TYPES)
     createdAt = models.DateTimeField(auto_now=True)
-    writter = models.ForeignKey(WritterModel, on_delete=models.CASCADE)
+    writter = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
 
 class LikeModel(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     blog = models.ForeignKey(BlogModel, on_delete=models.CASCADE)
     createdAt = models.DateTimeField(auto_now=True)
 
 
 class CommentModel(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     blog = models.ForeignKey(BlogModel, on_delete=models.CASCADE)
     createdAt = models.DateTimeField(auto_now=True)
