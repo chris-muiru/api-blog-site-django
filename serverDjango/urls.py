@@ -18,7 +18,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include("authentication.urls")),
-    path('writter/', include("writter.urls")),
 
     # login and logout for browsable api
     path('apiAuth', include("rest_framework.urls"))
