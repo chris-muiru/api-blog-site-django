@@ -1,13 +1,13 @@
 from dataclasses import fields
 from rest_framework import serializers
-from django.contrib.auth.models import User
+from .models import CustomUser
 
 
 class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['username', 'email', 'password']
 
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        return CustomUser.objects.create_user(**validated_data)
