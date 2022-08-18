@@ -1,17 +1,17 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import LoginSerializer
+from .serializers import RegisterSerializer
 from django.contrib.auth import authenticate, login
 from rest_framework.decorators import api_view, permission_classes
 from django.views.decorators.csrf import csrf_protect
 from rest_framework import status
 from rest_framework.permissions import AllowAny
+from django.contrib.auth.models import User
 
 
-@csrf_protect
 @api_view(['POST'])
-def LoginView(request):
+def loginView(request):
     if request.method == "POST":
         username = request.data['username']
         password = request.data['password']
@@ -19,15 +19,21 @@ def LoginView(request):
         if user is not None:
             if not request.user.is_authenticated:
                 login(request, user)
-                return Response({'msg': f'{request.user} successfully logged in'}, status=status.HTTP_200_OK)
+                return Response({'msg': 'user successfully logged in'}, status=status.HTTP_200_OK)
             else:
                 return Response({'msg': 'already authenticated'}, status=status.HTTP_202_ACCEPTED)
         return Response({"err": "unauthorised"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-
-class RegisterApiView():
-    pass
-
-
-# Create your views here.
+@api_view(['POST'])
+def registerView(request):
+    if request.method == 'POST':
+        deserializer = RegisterSerializer(data=request.data)
+        if deserializer.is_valid():
+            userExist = User.objects.filter(
+                username=deserializer.validated_data['username'])
+            if not userExist:
+                deserializer.save()
+        else:
+            return Response(deserializer.errors)
+    return Response({"msg": "user created"})
