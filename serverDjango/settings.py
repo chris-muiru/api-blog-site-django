@@ -25,6 +25,8 @@ SECRET_KEY = dotenv_values(".env")["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+AUTH_USER_MODEL = "authentication.CustomUser"
+
 ALLOWED_HOSTS = []
 
 
