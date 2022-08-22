@@ -1,13 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import RegisterSerializer
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from rest_framework.decorators import api_view, permission_classes
-from django.views.decorators.csrf import csrf_protect
+from rest_framework.permissions import AllowAny
 from rest_framework import status
 from .models import CustomUser
 
-
+@permission_classes([AllowAny])
 @api_view(['POST'])
 def loginView(request):
     username = request.data['username']
@@ -22,6 +22,7 @@ def loginView(request):
     return Response({"err": "unauthorised"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
+@permission_classes([AllowAny])
 @api_view(['POST'])
 def registerView(request):
     deserializer = RegisterSerializer(data=request.data)
@@ -33,3 +34,9 @@ def registerView(request):
     else:
         return Response(deserializer.errors)
     return Response({"msg": "user created"})
+
+
+@api_view(['GET'])
+def logoutView(request):
+    logout(request)
+    return Response({"msg": "logged out successfully"}, status=status.HTTP_200_OK)
