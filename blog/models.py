@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from users.models import CustomUser
 
 
-
 class BlogModel(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
@@ -12,6 +11,9 @@ class BlogModel(models.Model):
     blogtype = models.CharField(max_length=5, choices=BLOG_TYPES)
     createdAt = models.DateTimeField(auto_now=True)
     writter = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
 
 
 class LikeModel(models.Model):
