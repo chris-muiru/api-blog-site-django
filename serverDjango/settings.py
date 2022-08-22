@@ -25,7 +25,6 @@ SECRET_KEY = dotenv_values(".env")["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-AUTH_USER_MODEL = "authentication.CustomUser"
 
 ALLOWED_HOSTS = []
 
@@ -40,11 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
-    'writter',
-    'authentication',
+    'users',
     'rest_framework',
     "corsheaders"
 ]
+
+AUTH_USER_MODEL = "users.CustomUser"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
