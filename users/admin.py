@@ -10,5 +10,17 @@ class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = ["email", "username", ]
 
+    fieldsets = (
+        *UserAdmin.fieldsets,
+        (
+            'User role',
+            {
+                'fields': (
+                    'is_writter',
+                )
+            }
+        )
+    )
+
 
 admin.site.register(CustomUser, CustomUserAdmin)
