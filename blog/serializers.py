@@ -22,13 +22,17 @@ class LikeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         print(validated_data)
-        query = LikeModel.objects.filter(blog=validated_data['blog'])
-        if query:
-            query[0].is_liked = True
-            query[0].save()
-            return query[0]
-        else:
+        query = LikeModel.objects.filter(blog=validated_data['blog'])[0]
+        if not query:
             return LikeModel.objects.create(**validated_data)
+        elif query.is_liked == False:
+            query.is_liked = True
+            query.save()
+            return query
+        elif query.is_liked == True:
+            query.is_liked = False
+            query.save()
+            return query
 
 
 class CommentSerializer(serializers.ModelSerializer):
