@@ -1,5 +1,4 @@
-from urllib import request
-from django.shortcuts import render
+import logging
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -34,8 +33,7 @@ def blogView(request):
 def blogDetaillView(request, pk):
     try:
         query = BlogModel.objects.get(id=pk)
-        print(query)
-    except query.DoesNotExist:
+    except Exception as e:
         return Response({'err': 'blog does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
@@ -54,20 +52,30 @@ def blogDetaillView(request, pk):
         return Response({'msg': 'deleted'}, status=status.HTTP_200_OK)
 
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated, isWritterOrReadOnly])
-def likeView(request, blogId):
+def likeView(request, blogid):
+    if request.method == 'GET':
+        try:
+            blogStatus = BlogModel.objects.get(id=blogid)
+
+            query = LikeModel.objects.filter(
+                blog__id=blogid, is_liked=True).count()
+            context = {'likes': query}
+            return Response(context, status=status.HTTP_200_OK)
+        except Exception:
+            return Response({'err': 'blog does not exits'}, status=status.HTTP_400_BAD_REQUEST)
+
     if request.method == 'POST':
-        query = BlogModel.objects.filter(id=blogId)
-        # print(query)
-        # print(request.data)
+        query = BlogModel.objects.filter(id=blogid)
         if query:
             serializer = LikeSerializer(data=request.data)
             print(serializer.is_valid())
             if serializer.is_valid():
                 serializer.save(user=request.user, blog=query[0])
                 return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response({})
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response({'msg': 'incorrect blogid id'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST', 'GET'])
