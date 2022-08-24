@@ -53,7 +53,7 @@ def blogDetaillView(request, pk):
 
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated, isWritterOrReadOnly])
+@permission_classes([IsAuthenticated])
 def likeView(request, blogid):
     if request.method == 'GET':
         try:
