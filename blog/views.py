@@ -1,4 +1,3 @@
-import logging
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -23,9 +22,9 @@ def blogView(request):
                 title=serializer.validated_data['title'])
             if not query:
                 serializer.save(writter=request.user)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['PUT', 'DELETE', 'GET'])
@@ -70,9 +69,9 @@ def likeView(request, blogid):
         query = BlogModel.objects.filter(id=blogid)
         if query:
             serializer = LikeSerializer(data=request.data)
-            print(serializer.is_valid())
             if serializer.is_valid():
                 serializer.save(user=request.user, blog=query[0])
+                print(serializer.validated_data)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response({'msg': 'incorrect blogid id'}, status=status.HTTP_400_BAD_REQUEST)
