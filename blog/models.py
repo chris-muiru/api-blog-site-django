@@ -19,7 +19,7 @@ class BlogModel(models.Model):
 class LikeModel(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     blog = models.ForeignKey(BlogModel, on_delete=models.CASCADE)
-    is_liked = models.BooleanField(default=False)
+    is_liked = models.BooleanField(default=True)
     createdAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):

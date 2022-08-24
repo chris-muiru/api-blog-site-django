@@ -1,4 +1,3 @@
-from tokenize import Comment
 from rest_framework import serializers
 from .models import BlogModel, CommentModel, LikeModel
 
@@ -21,11 +20,13 @@ class LikeSerializer(serializers.ModelSerializer):
         fields = ['blog', 'user', 'is_liked']
 
     def create(self, validated_data):
-        print(validated_data)
-        query = LikeModel.objects.filter(blog=validated_data['blog'])[0]
+        query = LikeModel.objects.filter(blog=validated_data['blog'])
         if not query:
             return LikeModel.objects.create(**validated_data)
-        elif query.is_liked == False:
+        else:
+            query = query[0]
+
+        if query.is_liked == False:
             query.is_liked = True
             query.save()
             return query
