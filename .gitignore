@@ -4,3 +4,4 @@ db*
 .env
 venv
 
+requests.rest
