@@ -1,0 +1,49 @@
+POST http://localhost:8000/auth/login/
+content-type: application/json
+{
+    "username" : "james",
+    "password" : "james"
+}
+
+###
+
+GET http://localhost:8000/auth/logout
+
+###
+
+GET http://localhost:8000/blog/
+Cookie: 99k4kvd1pwir3iyd96g4ka1qws1bma2z
+
+###
+
+GET http://localhost:8000/blog/3
+Cookie: 99k4kvd1pwir3iyd96g4ka1qws1bma2z
+
+
+###
+
+POST http://localhost:8000/blog/like/3/
+Cookie: 99k4kvd1pwir3iyd96g4ka1qws1bma2z
+X-CSRFTOKEN: dt2RIsGeqeOJT4XI2BDkn3LXbEfLjTAR
+
+
+###
+
+
+
+GET http://localhost:8000/blog/like/3/
+Cookie: 99k4kvd1pwir3iyd96g4ka1qws1bma2z
+
+
+
+
+
+# csrf token: dt2RIsGeqeOJT4XI2BDkn3LXbEfLjTAR
+# session-id: 99k4kvd1pwir3iyd96g4ka1qws1bma2z
+
+
+##TODO: NodeJs Logggers ##
+# winston
+# morgan
+
+# TODO: look into cookie invalidation after the user has been logged out
