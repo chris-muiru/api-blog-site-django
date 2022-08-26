@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework import status
 from .models import CustomUser
 
+
 @permission_classes([AllowAny])
 @api_view(['POST'])
 def loginView(request):
@@ -18,7 +19,7 @@ def loginView(request):
             login(request, user)
             return Response({'msg': 'user successfully logged in'}, status=status.HTTP_200_OK)
         else:
-            return Response({'msg': 'already authenticated'}, status=status.HTTP_202_ACCEPTED)
+            return Response({'msg': 'already authenticated'}, status=status.HTTP_200_OK)
     return Response({"err": "unauthorised"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
