@@ -5,7 +5,13 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework import status
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import MyTokenObtainPairSerializer
 from .models import CustomUser
+
+"""
+imprementation using session authentication
+"""
 
 
 @permission_classes([AllowAny])
@@ -41,3 +47,8 @@ def registerView(request):
 def logoutView(request):
     logout(request)
     return Response({"msg": "logged out successfully"}, status=status.HTTP_200_OK)
+
+
+# for simplejwt authentication
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
