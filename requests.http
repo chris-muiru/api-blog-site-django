@@ -1,49 +1,75 @@
-POST http://localhost:8000/auth/login/
+##TODO: NodeJs Logggers ##
+# winston
+# morgan
+
+# TODO: look into cookie invalidation after the user has been logged out
+
+
+# login using token
+POST http://localhost:8000/api/token/ HTTP/1.1
 content-type: application/json
+
 {
     "username" : "james",
     "password" : "james"
 }
 
 ###
-
+# logout
 GET http://localhost:8000/auth/logout
 
 ###
 
+# get all blogs
 GET http://localhost:8000/blog/
-Cookie: 99k4kvd1pwir3iyd96g4ka1qws1bma2z
+Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYxNTQ4MDU1LCJpYXQiOjE2NjE1NDUwNTUsImp0aSI6IjY4MGQ5MDI0YzZjZTQwMzM5ZTE2NjAxNzg3NzhiOWMwIiwidXNlcl9pZCI6M30.1tNkGdV_yfLCPNJdE9eDC1oFfAQat51l8hQOOCrK2VQ
 
 ###
 
+# get blog by id
 GET http://localhost:8000/blog/3
-Cookie: 99k4kvd1pwir3iyd96g4ka1qws1bma2z
+Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYxNTQ4MDU1LCJpYXQiOjE2NjE1NDUwNTUsImp0aSI6IjY4MGQ5MDI0YzZjZTQwMzM5ZTE2NjAxNzg3NzhiOWMwIiwidXNlcl9pZCI6M30.1tNkGdV_yfLCPNJdE9eDC1oFfAQat51l8hQOOCrK2VQ
 
 
 ###
-
+# like a blog by id
 POST http://localhost:8000/blog/like/3/
-Cookie: 99k4kvd1pwir3iyd96g4ka1qws1bma2z
-X-CSRFTOKEN: dt2RIsGeqeOJT4XI2BDkn3LXbEfLjTAR
-
+Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYxNTQ4MDU1LCJpYXQiOjE2NjE1NDUwNTUsImp0aSI6IjY4MGQ5MDI0YzZjZTQwMzM5ZTE2NjAxNzg3NzhiOWMwIiwidXNlcl9pZCI6M30.1tNkGdV_yfLCPNJdE9eDC1oFfAQat51l8hQOOCrK2VQ
 
 ###
 
 
-
+# get likes in a blog using blog id
 GET http://localhost:8000/blog/like/3/
-Cookie: 99k4kvd1pwir3iyd96g4ka1qws1bma2z
+Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYxNTQ4MDU1LCJpYXQiOjE2NjE1NDUwNTUsImp0aSI6IjY4MGQ5MDI0YzZjZTQwMzM5ZTE2NjAxNzg3NzhiOWMwIiwidXNlcl9pZCI6M30.1tNkGdV_yfLCPNJdE9eDC1oFfAQat51l8hQOOCrK2VQ
 
+### 
 
+# create a comment
+POST http://localhost:8000/blog/comment/3/
+content-type: application/json
+Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYxNTQ4MDU1LCJpYXQiOjE2NjE1NDUwNTUsImp0aSI6IjY4MGQ5MDI0YzZjZTQwMzM5ZTE2NjAxNzg3NzhiOWMwIiwidXNlcl9pZCI6M30.1tNkGdV_yfLCPNJdE9eDC1oFfAQat51l8hQOOCrK2VQ
 
+{
+    "comment":"nihdhdh..hehehe"
+}
 
+###
+# update existing comment
+PUT http://localhost:8000/blog/comment/update/3/
+content-type: application/json
+Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYxNTQ4MDU1LCJpYXQiOjE2NjE1NDUwNTUsImp0aSI6IjY4MGQ5MDI0YzZjZTQwMzM5ZTE2NjAxNzg3NzhiOWMwIiwidXNlcl9pZCI6M30.1tNkGdV_yfLCPNJdE9eDC1oFfAQat51l8hQOOCrK2VQ
 
-# csrf token: dt2RIsGeqeOJT4XI2BDkn3LXbEfLjTAR
-# session-id: 99k4kvd1pwir3iyd96g4ka1qws1bma2z
+{
+    "comment":"ferkgkrehghrkhgr..hehehe"
+}
 
+###
+# get comment by id
+GET http://localhost:8000/blog/comment/update/3/
+Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYxNTQ4MDU1LCJpYXQiOjE2NjE1NDUwNTUsImp0aSI6IjY4MGQ5MDI0YzZjZTQwMzM5ZTE2NjAxNzg3NzhiOWMwIiwidXNlcl9pZCI6M30.1tNkGdV_yfLCPNJdE9eDC1oFfAQat51l8hQOOCrK2VQ
 
-##TODO: NodeJs Logggers ##
-# winston
-# morgan
-
-# TODO: look into cookie invalidation after the user has been logged out
+### 
+# delete comment
+DELETE  http://localhost:8000/blog/comment/update/3/
+Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYxNTQ4MDU1LCJpYXQiOjE2NjE1NDUwNTUsImp0aSI6IjY4MGQ5MDI0YzZjZTQwMzM5ZTE2NjAxNzg3NzhiOWMwIiwidXNlcl9pZCI6M30.1tNkGdV_yfLCPNJdE9eDC1oFfAQat51l8hQOOCrK2VQ
