@@ -12,7 +12,7 @@ from .models import BlogModel, CommentModel, LikeModel
 @permission_classes([IsAuthenticated, isWritterOrReadOnly])
 def blogView(request):
     if request.method == 'GET':
-        queryset = BlogModel.objects.all()
+        queryset = BlogModel.objects.all().order_by("-createdAt")
         serializer = BlogSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     if request.method == 'POST':
@@ -113,4 +113,3 @@ def commentDetailView(request, commentid):
     if request.method == 'DELETE':
         query.delete()
         return Response({'comment': 'deleted'}, status=status.HTTP_200_OK)
-
