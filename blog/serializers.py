@@ -8,7 +8,7 @@ class BlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = BlogModel
         fields = ['id', 'title', 'content',
-                  'blogtype', 'createdAt', 'writterName']
+                  'blogType', 'createdAt', 'writterName']
 
 
 class LikeSerializer(serializers.ModelSerializer):
