@@ -29,7 +29,7 @@ def blogView(request):
 
 @api_view(['PUT', 'DELETE', 'GET'])
 @permission_classes([IsAuthenticated, isWritterOrReadOnly])
-def blogDetaillView(request, pk):
+def blogDetailView(request, pk):
     try:
         query = BlogModel.objects.get(id=pk)
     except Exception as e:
@@ -113,3 +113,4 @@ def commentDetailView(request, commentid):
     if request.method == 'DELETE':
         query.delete()
         return Response({'comment': 'deleted'}, status=status.HTTP_200_OK)
+
