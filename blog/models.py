@@ -8,7 +8,7 @@ class BlogModel(models.Model):
     content = models.TextField()
     BLOG_TYPES = (('prog', 'programming'), ('net', 'networking'),
                   ('data', 'data-science'))
-    blogtype = models.CharField(max_length=5, choices=BLOG_TYPES)
+    blogType = models.CharField(max_length=5, choices=BLOG_TYPES)
     createdAt = models.DateTimeField(auto_now=True)
     writter = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
