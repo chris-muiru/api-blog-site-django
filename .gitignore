@@ -5,3 +5,4 @@ db*
 venv
 
 requests.rest
+requests.http
