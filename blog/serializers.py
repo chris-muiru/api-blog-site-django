@@ -3,7 +3,7 @@ from .models import BlogModel, CommentModel, LikeModel
 
 
 class BlogSerializer(serializers.ModelSerializer):
-    writterName = serializers.ReadOnlyField(source='user.username')
+    writterName = serializers.ReadOnlyField(source='writter.username')
 
     class Meta:
         model = BlogModel
