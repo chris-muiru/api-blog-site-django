@@ -8,6 +8,12 @@ from .permissions import isWritterOrReadOnly
 from .models import BlogModel, CommentModel, LikeModel
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def canCreateBlog(request):
+    return Response(request.user.is_writter == True, status=status.HTTP_200_OK)
+
+
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated, isWritterOrReadOnly])
 def blogView(request):
@@ -71,7 +77,7 @@ def likeView(request, blogid):
             serializer = LikeSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save(user=request.user, blog=query[0])
-                print(serializer.validated_data)
+                # print(serializer.validated_data)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response({'msg': 'incorrect blogid id'}, status=status.HTTP_400_BAD_REQUEST)
