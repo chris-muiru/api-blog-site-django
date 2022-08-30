@@ -10,8 +10,18 @@ from .models import BlogModel, CommentModel, LikeModel
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def canCreateBlog(request):
+def userIsWritter(request):
     return Response(request.user.is_writter == True, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def accessToCrudFunctionalityOnBlogId(request, blogId):
+    try:
+        query = BlogModel.objects.get(id=blogId)
+    except Exception as e:
+        return Response({'err': 'Blog doest exist'}, status=status.HTTP_404_NOT_FOUND)
+    return Response(request.user == query.writter, status=status.HTTP_200_OK)
 
 
 @api_view(['GET', 'POST'])
@@ -35,7 +45,7 @@ def blogView(request):
 
 @api_view(['PUT', 'DELETE', 'GET'])
 @permission_classes([IsAuthenticated, isWritterOrReadOnly])
-def blogDetailView(request, pk):
+def blogDetailView(request, pk, *args, **kwargs):
     try:
         query = BlogModel.objects.get(id=pk)
     except Exception as e:
@@ -44,6 +54,10 @@ def blogDetailView(request, pk):
     if request.method == 'GET':
         serializer = BlogSerializer(query)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # has_obj_permission doest work on function based views hence i created a check object permission explicitly
+    elif query.writter != request.user:
+        return Response({'msg': 'You are not authorized'}, status=status.HTTP_403_FORBIDDEN)
 
     elif request.method == 'PUT':
         serializer = BlogSerializer(query, data=request.data)
@@ -59,20 +73,20 @@ def blogDetailView(request, pk):
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
-def likeView(request, blogid):
+def likeView(request, blogId):
     if request.method == 'GET':
         try:
-            blogStatus = BlogModel.objects.get(id=blogid)
+            blogStatus = BlogModel.objects.get(id=blogId)
 
             query = LikeModel.objects.filter(
-                blog__id=blogid, is_liked=True).count()
+                blog__id=blogId, is_liked=True).count()
             context = {'likes': query}
             return Response(context, status=status.HTTP_200_OK)
         except Exception:
             return Response({'err': 'blog does not exits'}, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'POST':
-        query = BlogModel.objects.filter(id=blogid)
+        query = BlogModel.objects.filter(id=blogId)
         if query:
             serializer = LikeSerializer(data=request.data)
             if serializer.is_valid():
@@ -80,18 +94,18 @@ def likeView(request, blogid):
                 # print(serializer.validated_data)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    return Response({'msg': 'incorrect blogid id'}, status=status.HTTP_400_BAD_REQUEST)
+    return Response({'msg': 'incorrect blogId id'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST', 'GET'])
 @permission_classes([IsAuthenticated])
-def commentView(request, blogid):
-    queryset = CommentModel.objects.filter(blog__id=blogid)
+def commentView(request, blogId):
+    queryset = CommentModel.objects.filter(blog__id=blogId)
     serializer = CommentSerializer(queryset, many=True)
     if request.method == 'GET':
         return Response(serializer.data, status=status.HTTP_200_OK)
     if request.method == 'POST':
-        blogQuery = BlogModel.objects.filter(id=blogid)[0]
+        blogQuery = BlogModel.objects.filter(id=blogId)[0]
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
             checkComment = CommentModel.objects.filter(
@@ -105,8 +119,8 @@ def commentView(request, blogid):
 
 @api_view(['DELETE', 'GET', 'PUT'])
 @permission_classes([IsAuthenticated])
-def commentDetailView(request, commentid):
-    query = CommentModel.objects.filter(id=commentid)[0]
+def commentDetailView(request, commentId):
+    query = CommentModel.objects.filter(id=commentId)[0]
     serializer = CommentSerializer(query)
     if request.method == 'GET':
         return Response(serializer.data, status=status.HTTP_200_OK)
