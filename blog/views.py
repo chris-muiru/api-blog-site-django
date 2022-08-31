@@ -6,6 +6,7 @@ from rest_framework import status
 from .serializers import BlogSerializer, CommentSerializer, LikeSerializer
 from .permissions import isWritterOrReadOnly
 from .models import BlogModel, CommentModel, LikeModel
+from .choices import BLOG_TYPES
 
 
 @api_view(['GET'])
@@ -133,3 +134,9 @@ def commentDetailView(request, commentId):
     if request.method == 'DELETE':
         query.delete()
         return Response({'comment': 'deleted'}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated, isWritterOrReadOnly])
+def getBlogTypeView(request):
+    return Response(BLOG_TYPES, status=status.HTTP_200_OK)
