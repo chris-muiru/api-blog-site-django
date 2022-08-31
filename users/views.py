@@ -8,6 +8,15 @@ from rest_framework import status
 from .serializers import MyTokenObtainPairSerializer
 from .models import CustomUser
 
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+# for simplejwt authentication
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+
 """
 imprementation using session authentication
 """
