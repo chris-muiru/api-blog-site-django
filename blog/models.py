@@ -23,7 +23,7 @@ class LikeModel(models.Model):
     createdAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.is_liked}"
+        return f"{self.user.username} - {self.blog.title}"
 
 
 class CommentModel(models.Model):
