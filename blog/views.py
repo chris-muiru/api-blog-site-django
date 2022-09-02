@@ -92,7 +92,6 @@ def likeView(request, blogId):
             serializer = LikeSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save(user=request.user, blog=query[0])
-                # print(serializer.validated_data)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response({'msg': 'incorrect blogId id'}, status=status.HTTP_400_BAD_REQUEST)
