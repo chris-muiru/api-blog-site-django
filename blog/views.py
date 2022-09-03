@@ -100,7 +100,8 @@ def likeView(request, blogId):
 @api_view(['POST', 'GET'])
 @permission_classes([IsAuthenticated])
 def commentView(request, blogId):
-    queryset = CommentModel.objects.filter(blog__id=blogId)
+    queryset = CommentModel.objects.filter(
+        blog__id=blogId).order_by("createdAt")
     serializer = CommentSerializer(queryset, many=True)
     if request.method == 'GET':
         return Response(serializer.data, status=status.HTTP_200_OK)
