@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'blog',
     'users',
     'rest_framework',
+    'rest_framework_swagger',
     'rest_framework_simplejwt.token_blacklist',
     "corsheaders"
 ]
@@ -74,7 +75,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'staticfiles': 'django.templatetags.static',
+            }
         },
+
     },
 ]
 
@@ -142,6 +147,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
 CORS_ALLOWED_ORIGINS = ['http://localhost:3000', ]
