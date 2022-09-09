@@ -18,7 +18,9 @@ from django.urls import path, include
 from users.views import MyTokenObtainPairView
 from rest_framework_simplejwt.views import TokenRefreshView
 
+from rest_framework_swagger.views import get_swagger_view
 
+schema_view = get_swagger_view(title='blogsite API')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include("users.urls")),
@@ -26,5 +28,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('blog/', include("blog.urls")),
     # login and logout for browsable api
-    path('apiAuth', include("rest_framework.urls"))
+    path('apiAuth', include("rest_framework.urls")),
+    
+    path('swagger/', schema_view)
 ]
