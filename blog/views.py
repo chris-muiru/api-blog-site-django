@@ -121,17 +121,24 @@ def commentView(request, blogId):
 @api_view(['DELETE', 'GET', 'PUT'])
 @permission_classes([IsAuthenticated])
 def commentDetailView(request, commentId):
-    query = CommentModel.objects.filter(id=commentId)[0]
+    try:
+        query = CommentModel.objects.filter(id=commentId)[0]
+    except Exception:
+        return Response({"err": "blog does not exist"}, status=status.HTTP_404_NOT_FOUND)
     serializer = CommentSerializer(query)
     if request.method == 'GET':
         return Response(serializer.data, status=status.HTTP_200_OK)
-    if request.method == 'PUT':
+
+    elif query.user != request.user:
+        return Response({'msg': 'You are not authorized'}, status=status.HTTP_403_FORBIDDEN)
+    
+    elif request.method == 'PUT':
         serializer = CommentSerializer(query, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    if request.method == 'DELETE':
+    elif request.method == 'DELETE':
         query.delete()
         return Response({'comment': 'deleted'}, status=status.HTTP_200_OK)
 
@@ -140,3 +147,9 @@ def commentDetailView(request, commentId):
 @permission_classes([IsAuthenticated, isWritterOrReadOnly])
 def getBlogTypeView(request):
     return Response(BLOG_TYPES, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def topBlogView(request):
+    pass
